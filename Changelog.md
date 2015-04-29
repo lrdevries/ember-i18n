@@ -1,3 +1,97 @@
+## 3.0.1
+
+ * Fix a bug where `missingMessage` held on to the first `context` it was sent for a given translation key. Now it recomputes on each invocation.
+
+## 3.0.0
+
+ * Compatible with Ember 1.x. Notably, compatible with Ember 1.10+, which Ember-I18n 2.9.1 was not.
+ * Compatible with Handlebars 1.x and 2.x.
+ * Basic Ember-CLI support. When using Ember-I18n as an Ember-CLI add-on, it installs itself as a Bower dependency and adds `i18n.js` and `i18n-plurals.js` to the app.
+ * Drop built-in support for Handlebars template compilation. Ember-I18n ships with support for very basic Handlebars-style templates like `"Hello, {{person.name}}"`. The template compilation method is part of the public API and can be overridden.
+ * Built-in translation compiler is more friendly to whitespace within interpolations.
+ * Drop support for the external `CLDR.js` definition of pluralization rules. These rules are now included as `i18n-plurals.js`
+ * `{{t}}` helper uses `registerBoundHelper`. This makes the code smaller and faster. The helper no longer supports passing `tagName`. The helper no longer obeys the `I18N_TRANSLATE_HELPER_SPAN` environment flag.
+ * `eachTranslatedAttribute` gracefully handles `null` translation keys
+ * Drop support for `{{translateAttr}}`. This helper was unbound. Instead use a sub-expression: `<img title="{{unbound (t 'my.img.title')}}>"`.
+ * Interpolations are always escaped by default. (This was the intended behavior before, but there were bugs that caused some interpolations to come through unescaped.) Use `Ember.Handlebars.SafeString` or triple-stache notation to avoid over-escaping.
+ * `TranslateableProperties` cleans up translated property observers on destroy
+ * `missingMessage` takes the context as well as the translation key so users can generate more contextually-aware "missing template" messages.
+
+## 2.9.1, 2.2.3, 2.1.1 (2014-12-24)
+
+ * Handlebars-less template compiler escapes interpolations
+   by default. Use triple-stache syntax or
+   `Ember.Handlebars.SafeString` for HTML-safe interpolations.
+
+## 2.9.0 2014-10-20
+
+ * Ember-I18n 2.9+ is not compatible with Ember 1.9+
+ * Use `Ember.$.isFunction` instead of `jQuery.isFunction`
+ * Deprecate use of `tagName` in the `{{t}}` helper
+ * Implement pluralization logic in this project and remove
+   dependency on CLDR.js
+ * Expose `I18n.missingMessage` for customising the
+   "missing translation" message
+ * `Makefile` ensures the environment has `node`, `npm`,
+   and `phantomjs`
+
+## 2.2.2 2014-09-16
+
+ * Use internal UUID generation, since implementations differ
+   across Ember versions
+ * Select template compiler on first use so
+   `Ember.ENV.I18N_COMPILE_WITHOUT_HANDLEBARS` is sure to have
+   been set properly.
+ * Fix TranslateableAttributes tests on Ember Canary
+ * Better messaging during the build process
+
+## 2.2.1 2014-08-17
+
+ * Fixed overeager warnings related to I18N_COMPILE_WITHOUT_HANDLEBARS
+   and unquoted key arguments to the `{{t}}` helper.
+
+## 2.2.0 2014-08-16
+
+ * The `{{t}}` helper now warns if passed an unquoted key argument.
+   It still uses unquoted arguments as string literals, but this
+   behavior will change in the next major release.
+ * Removed deprecation warning for those who've opt-in to
+   `I18N_COMPILE_WITHOUT_HANDLEBARS`
+ * Fixed a typo in the warning message for
+   `I18N_COMPILE_WITHOUT_HANDLEBARS`
+ * Remove check for `Ember.I18n.fire` as that was only
+   necessary on Ember 0.9, which this library no longer supports.
+ * Don't warn on missing translations. Clients that want to be notified
+   can subscribe to the `missing` event on `Ember.I18n`.
+ * `compileWithHandlebars` uses saved-off `warn` helper (which
+   uses `Ember.Logger.warn` rather than `Ember.warn`).
+ * Run separate Travis builds for each dependency set.
+ * Add Sinon as a test dependency and use its spies in specs.
+
+## 2.1.0 2014-08-08
+
+ * Use `Ember.uuid` to generate unique IDs
+ * Add a Handlebars-less compiler; enable with
+   `Ember.ENV.I18N_COMPILE_WITHOUT_HANDLEBARS = true;`
+ * `{{t}}` helper uses Metamorph tags.
+ * `{{t}}` helper: allow turning off the default `<span>`
+   tag; enable with
+   `Ember.FEATURES.I18N_TRANSLATE_HELPER_SPAN = false;`
+
+## 2.0.0 2014-05-28
+
+ * Drop support for Ember 0.x.
+
+## v1.6.4 2014-05-27
+
+ * Use `Ember.Handlebars`, not `Handlebars` for helper management
+ * The default `compileTemplate` throws an `Ember.Error` if the full
+   `Ember.Handlebars` is not available
+ * Check `view.$()` instead of `view.state` as Ember is deprecating the
+   latter in favor in favor of `view._state`, but doesn't consider either
+   to be part of the public API.
+ * Convert `Em` to `Ember` for consistency
+
 ## v1.6.3 2014-02-19
 
  * relax CLDR and Handlebars dependencies via the `^` operator
